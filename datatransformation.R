@@ -83,3 +83,73 @@ transmute(flights,
 x <-  1:10
 cumsum(x)
 cummean(x)
+
+summarise(flights, delay = mean(dep_delay, na.rm = TRUE))
+by_day <- group_by(flights, year, month, day)
+
+a <- summarise(by_day, delay = mean(dep_delay, na.rm = TRUE))
+# gives the mean delay time everyday row_number = 365
+
+# Together group_by() and summarise() provide one of the tools 
+# that you’ll use most commonly when working with dplyr: 
+# grouped summaries. 
+
+# Imagine that we want to explore the relationship between the 
+# distance and average delay for each location. Using what you 
+# know about dplyr, you might write code like this:
+
+by_dest <- group_by(flights, dest)
+delay <- summarise(by_dest, 
+                   count = n(), 
+                   dist = mean(distance, na.rm = TRUE), 
+                   delay = mean(arr_delay, na.rm = TRUE))
+delay
+delay <- filter(delay, count > 20, dest != "HNL")
+
+ggplot(data =  delay, mapping = aes(x = dist, y = delay)) + 
+  geom_point(aes(size = count), alpha = 1/3) + 
+  geom_smooth(se = FALSE)
+
+
+delays <- flights %>% 
+  group_by(dest) %>% 
+  summarise(
+    count = n(), 
+    dist = mean(distance, na.rm = TRUE), 
+    delay = mean(arr_delay, na.rm = TRUE)
+  ) %>% 
+  filter(count > 20, dest != "HNL")
+
+
+not_cancelled <- flights %>% 
+  filter(!is.na(dep_delay), !is.na(arr_delay))
+
+not_cancelled %>%
+  group_by(year, month, day) %>%
+    summarise(mean = mean(dep_delay))
+
+delays <- not_cancelled %>%
+  group_by(tailnum) %>%
+    summarise(
+      delay = mean(arr_delay)
+    )
+
+ggplot(data = delays, mapping = aes(x = delay)) + 
+  geom_freqpoly(binwidth = 10)
+
+
+delays <- not_cancelled %>% 
+  group_by(tailnum) %>%
+    summarise(
+      delay = mean(arr_delay, na.rm = TRUE), 
+      n = n()
+    )
+
+
+ggplot(data = delays, mapping = aes(x = n, y = delay)) + 
+  geom_point(alpha = 1/10)
+
+delays %>%
+  filter(n > 20) %>%
+    ggplot(mapping = aes(x = n, y = delay)) +
+     geom_point(alpha = 1/10)
