@@ -153,3 +153,38 @@ delays %>%
   filter(n > 20) %>%
     ggplot(mapping = aes(x = n, y = delay)) +
      geom_point(alpha = 1/10)
+
+# 5.3 arrange()
+
+arrange(flights, year, month, day) # <--change order of the dataframe by selected column
+
+arrange(flights, desc(arr_delay)) ## <-- In descending order
+
+df <- tibble(x=c(5,2,NA))
+arrange(df, x) ## Missing values are sorted at the end
+
+ # 5.4 select()
+
+select(flights, year, month, day)
+
+select(flights, starts_with("y"))
+select(flights, ends_with("y"))
+select(flights, contains("e"))
+select(flights, matches("(.)\\1")) ## regular expression
+
+rename(flights, tail_num = tailnum)  ## rename variable names without dropping vars
+
+# Renaming -----------------------------------------
+# * select() keeps only the variables you specify
+select(iris, petal_length = Petal.Length)
+
+# * rename() keeps all variables
+rename(iris, petal_length = Petal.Length)
+
+select(flights, time_hour, air_time, everything())
+
+# 5.6 add new variables with mutate()
+
+flights_sml <- select
+
+# 12 Tidy data
