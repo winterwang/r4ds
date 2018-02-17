@@ -188,3 +188,71 @@ select(flights, time_hour, air_time, everything())
 flights_sml <- select
 
 # 12 Tidy data
+
+library(tidyverse)
+
+table1
+table2
+table3
+table4a
+table4b
+
+table4a %>% 
+  gather(`1999`, `2000`, key = "year", value = "cases")
+
+table4b %>%
+  gather(`1999`, `2000`, key = "year", value = "population")
+
+
+
+tidy4a <- table4a %>% 
+  gather(`1999`, `2000`, key = "year", value = "cases")
+
+tidy4b <- table4b %>%
+  gather(`1999`, `2000`, key = "year", value = "population")
+
+
+left_join(tidy4a, tidy4b)
+
+spread(table2, key = type, value  = count)
+
+
+stocks <- tibble(
+  year = c(2015, 2015, 2016, 2016), 
+  half = c(   1,    2,    1,    2),
+  return = c(1.88, 0.59, 0.92, 0.17)
+)
+
+stocks %>%
+  spread(key = year, value = return) %>%
+    gather("year", "return", `2015`:`2016`)
+
+table4a %>%
+  gather(`1999`, `2000`, key = "year", value = "cases")
+
+preg <- tribble(
+  ~pregnant, ~male, ~female, 
+  "yes",      NA,    10, 
+  "no",       20,    12
+)
+
+preg %>%
+  gather(`male`, `female`, key = "Gender", value = "number")
+
+
+table3 %>%
+  separate(rate, into = c("cases", "population"))
+
+table3 %>%
+  separate(rate, into = c("cases", "population"), sep = "/")
+
+table3 %>%
+  separate(rate, into = c("cases", "population"), convert = TRUE)
+
+table5 %>%
+  unite(new, century, year)
+
+table5 %>%
+  unite(new, century, year, sep = "")
+
+# 13 Relational data
